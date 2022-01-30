@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
 // Import the library 'Roles'
@@ -17,8 +18,8 @@ contract FarmerRole is AccessControlEnumerable {
     bytes32 public constant FARMER = keccak256("FARMER");
 
     // In the constructor make the address that deploys this contract the 1st farmer
-    constructor() public {
-        _addFarmer(msg.sender);
+    constructor() {
+        // _addFarmer(msg.sender);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role
@@ -45,13 +46,13 @@ contract FarmerRole is AccessControlEnumerable {
 
     // Define an internal function '_addFarmer' to add this role, called by 'addFarmer'
     function _addFarmer(address account) internal {
-        _grantRole(FARMER, account);
+        grantRole(FARMER, account);
         emit RoleGranted(FARMER, account, msg.sender);
     }
 
     // Define an internal function '_removeFarmer' to remove this role, called by 'removeFarmer'
     function _removeFarmer(address account) internal {
-        __revokeRole(FARMER, account);
+        revokeRole(FARMER, account);
         emit RoleRevoked(FARMER, account, msg.sender);
     }
 }

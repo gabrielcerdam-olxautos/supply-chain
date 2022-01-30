@@ -1,4 +1,5 @@
-pragma solidity ^0.4.24;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0 <0.9.0;
 
 // Import the library 'Roles'
 import "../../node_modules/@openzeppelin/contracts/access/AccessControlEnumerable.sol";
@@ -19,19 +20,13 @@ contract DistributorRole is AccessControlEnumerable {
     }
 
     // In the constructor make the address that deploys this contract the 1st distributor
-    constructor() public {
-        _addDistributor(msg.sender);
+    constructor() {
+        // _addDistributor(msg.sender);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role
-    modifier isDistributor() {
-        require(isDistributor(msg.sender));
-        _;
-    }
-
-    //??
     modifier onlyDistributor() {
-        require(hasRole(msg.sender));
+        require(isDistributor(msg.sender));
         _;
     }
 
@@ -52,13 +47,13 @@ contract DistributorRole is AccessControlEnumerable {
 
     // Define an internal function '_addDistributor' to add this role, called by 'addDistributor'
     function _addDistributor(address account) internal {
-        _grantRole(DISTRIBUTOR, account);
+        grantRole(DISTRIBUTOR, account);
         emit RoleGranted(DISTRIBUTOR, account, msg.sender);
     }
 
     // Define an internal function '_removeDistributor' to remove this role, called by 'removeDistributor'
     function _removeDistributor(address account) internal {
-        __revokeRole(Distributor, account);
-        emit RoleRevoked(Distributor, account, msg.sender);
+        revokeRole(DISTRIBUTOR, account);
+        emit RoleRevoked(DISTRIBUTOR, account, msg.sender);
     }
 }

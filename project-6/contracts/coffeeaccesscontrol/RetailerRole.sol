@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
 // Import the library 'Roles'
@@ -14,8 +15,8 @@ contract RetailerRole is AccessControlEnumerable {
     bytes32 public constant RETAILER = keccak256("RETAILER");
 
     // In the constructor make the address that deploys this contract the 1st retailer
-    constructor() public {
-        _addRetailer(msg.sender);
+    constructor() {
+        // _addRetailer(msg.sender);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role
@@ -41,13 +42,13 @@ contract RetailerRole is AccessControlEnumerable {
 
     // Define an internal function '_addRetailer' to add this role, called by 'addRetailer'
     function _addRetailer(address account) internal {
-        _grantRole(RETAILER, account);
+        grantRole(RETAILER, account);
         emit RoleGranted(RETAILER, account, msg.sender);
     }
 
     // Define an internal function '_removeRetailer' to remove this role, called by 'removeRetailer'
     function _removeRetailer(address account) internal {
-        __revokeRole(RETAILER, account);
+        revokeRole(RETAILER, account);
         emit RoleRevoked(RETAILER, account, msg.sender);
     }
 }
