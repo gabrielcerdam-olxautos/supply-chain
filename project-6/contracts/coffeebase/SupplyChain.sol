@@ -23,6 +23,8 @@ contract SupplyChain is
 
     // Define a variable called 'sku' for Stock Keeping Unit (SKU)
     uint256 sku;
+    // valores unicos que definen una concatenacion de informacion
+    // sucursal/producto/id
 
     // Define a public mapping 'items' that maps the UPC to an Item.
     mapping(uint256 => Item) items;
@@ -153,7 +155,7 @@ contract SupplyChain is
     // and set 'upc' to 1
     constructor() {
         // owner = msg.sender;
-        sku = 1;
+        sku = 0;
         upc = 1;
     }
 
@@ -175,9 +177,9 @@ contract SupplyChain is
         // Add the new item as part of Harvest
         // Increment sku
         items[_upc] = Item({
-            sku: _upc + 1,
+            sku: sku + 1,
             upc: _upc,
-            ownerID: owner(),
+            ownerID: msg.sender,
             originFarmerID: _originFarmerID,
             originFarmName: _originFarmName,
             originFarmInformation: _originFarmInformation,
@@ -191,7 +193,7 @@ contract SupplyChain is
             retailerID: address(0),
             consumerID: address(0)
         });
-        sku = sku + 1;
+        // sku = sku + 1;
         emit Harvested(_upc);
         // Emit the appropriate event
     }
@@ -345,6 +347,7 @@ contract SupplyChain is
         originFarmInformation = items[_upc].originFarmInformation;
         originFarmLatitude = items[_upc].originFarmLatitude;
         originFarmLongitude = items[_upc].originFarmLongitude;
+
         return (
             itemSKU,
             itemUPC,

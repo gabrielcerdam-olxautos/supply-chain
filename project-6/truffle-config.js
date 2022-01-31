@@ -1,5 +1,5 @@
 const mnemonic =
-  "spirit supply whale amount human item harsh scare congress discover talent hamster";
+  "desk rain bless test wise purchase brave mountain cement giggle task found";
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {
