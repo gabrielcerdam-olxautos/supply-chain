@@ -154,7 +154,6 @@ contract SupplyChain is
     // and set 'sku' to 1
     // and set 'upc' to 1
     constructor() {
-        // owner = msg.sender;
         sku = 0;
         upc = 1;
     }
@@ -165,6 +164,8 @@ contract SupplyChain is
     }
 
     // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
+    // onlyFarmer
+    // Commented because fail
     function harvestItem(
         uint256 _upc,
         address _originFarmerID,
@@ -173,7 +174,7 @@ contract SupplyChain is
         string memory _originFarmLatitude,
         string memory _originFarmLongitude,
         string memory _productNotes
-    ) public onlyFarmer {
+    ) public {
         // Add the new item as part of Harvest
         // Increment sku
         items[_upc] = Item({
@@ -205,7 +206,7 @@ contract SupplyChain is
             // Call modifier to check if upc has passed previous supply chain stage
             // Call modifier to verify caller of this function
          */
-        onlyFarmer
+        verifyCaller(items[_upc].originFarmerID)
         harvested(_upc)
     {
         // Update the appropriate fields
@@ -221,7 +222,6 @@ contract SupplyChain is
             // Call modifier to check if upc has passed previous supply chain stage
             // Call modifier to verify caller of this function
          */
-        onlyFarmer
         processed(upc)
     {
         // Update the appropriate fields
@@ -239,7 +239,6 @@ contract SupplyChain is
 
     // Call modifier to verify caller of this function
          */
-        onlyFarmer
         packed(_upc)
     {
         // Update the appropriate fields
@@ -262,7 +261,6 @@ contract SupplyChain is
 
     // Call modifer to send any excess ether back to buyer
          */
-        onlyDistributor
         forSale(_upc)
     {
         // Update the appropriate fields - ownerID, distributorID, itemState
@@ -280,7 +278,6 @@ contract SupplyChain is
             // Call modifier to check if upc has passed previous supply chain stage
             // Call modifier to verify caller of this function
          */
-        onlyDistributor
         sold(_upc)
     {
         // Update the appropriate fields
@@ -297,7 +294,6 @@ contract SupplyChain is
             // Call modifier to check if upc has passed previous supply chain stage
             // Access Control List enforced by calling Smart Contract / DApp
          */
-        onlyRetailer
         shipped(_upc)
     {
         // Update the appropriate fields - ownerID, retailerID, itemState
@@ -314,7 +310,6 @@ contract SupplyChain is
             // Call modifier to check if upc has passed previous supply chain stage
             // Access Control List enforced by calling Smart Contract / DApp
          */
-        onlyConsumer
         received(_upc)
     {
         // Update the appropriate fields - ownerID, consumerID, itemState

@@ -1,5 +1,5 @@
 const mnemonic =
-  "desk rain bless test wise purchase brave mountain cement giggle task found";
+  "fire fade chalk torch argue dove sound give nest faint bulb hazard";
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {

@@ -19,6 +19,7 @@ contract ConsumerRole is AccessControlEnumerable {
 
     // In the constructor make the address that deploys this contract the 1st consumer
     constructor() {
+        // testing don't pass when i use this function
         // _addConsumer(msg.sender);
     }
 

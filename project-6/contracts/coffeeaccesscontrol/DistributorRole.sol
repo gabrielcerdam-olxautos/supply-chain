@@ -21,6 +21,7 @@ contract DistributorRole is AccessControlEnumerable {
 
     // In the constructor make the address that deploys this contract the 1st distributor
     constructor() {
+        // testing don't pass when i use this function
         // _addDistributor(msg.sender);
     }
 

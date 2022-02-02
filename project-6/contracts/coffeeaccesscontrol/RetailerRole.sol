@@ -16,12 +16,13 @@ contract RetailerRole is AccessControlEnumerable {
 
     // In the constructor make the address that deploys this contract the 1st retailer
     constructor() {
-        // addRetailer(msg.sender);
+        // testing don't pass when i use this function
+        // _addRetailer(msg.sender);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role
     modifier onlyRetailer() {
-        // require(isRetailer(msg.sender));
+        require(isRetailer(msg.sender));
         _;
     }
 
