@@ -1,5 +1,5 @@
 const mnemonic =
-  "cake omit rain brave monkey river coffee brisk coral knock lake menu";
+  "spirit supply whale amount human item harsh scare congress discover talent hamster";
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {

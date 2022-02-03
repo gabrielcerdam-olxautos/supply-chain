@@ -68,7 +68,7 @@ App = {
         });
       } catch (error) {
         // User denied account access...
-        console.error("User denied account access");
+        console.error("error: " + "User denied account access");
       }
     }
     // Legacy dapp browsers...
@@ -77,12 +77,12 @@ App = {
     }
     // If no injected web3 instance is detected, fall back to Ganache
     else {
-      App.web3Provider = new providers.HttpProvider("http://localhost:8545");
+      App.web3Provider = new providers.HttpProvider("http://localhost:7545");
     }
 
     App.getMetaskAccountID();
 
-    return App.initSupplyChain();
+    return await App.initSupplyChain();
   },
 
   getMetaskAccountID: function () {
@@ -99,24 +99,47 @@ App = {
     });
   },
 
-  initSupplyChain: function () {
+  initSupplyChain: async function () {
     /// Source the truffle compiled smart contracts
     var jsonSupplyChain = "../../build/contracts/SupplyChain.json";
-
     /// JSONfy the smart contracts
     $.getJSON(jsonSupplyChain, function (data) {
-      // console.log("data", data);
       var SupplyChainArtifact = data;
-      // console.log("TruffleContract", TruffleContract);
       App.contracts.SupplyChain = TruffleContract(SupplyChainArtifact);
       App.contracts.SupplyChain.setProvider(App.web3Provider);
       // console.log("App.contracts.SupplyChain", App.contracts.SupplyChain);
       App.fetchItemBufferOne();
       App.fetchItemBufferTwo();
       App.fetchEvents();
+
+      // To test
     });
 
     return App.bindEvents();
+  },
+
+  async assignRoles(role) {
+    try {
+      const instance = await Appy.contracts.SupplyChain.deployed();
+      const addFarmer = await instance.addFarmer(App.originFarmerID, {
+        from: App.metamaskAccountID,
+      });
+      console.log("addFarmer", addFarmer);
+      const addDistributor = await instance.addDistributor(App.distributorID, {
+        from: App.metamaskAccountID,
+      });
+      console.log("addDistributor", addDistributor);
+      const addRetailer = await instance.addRetailer(App.retailerID, {
+        from: App.metamaskAccountID,
+      });
+      console.log("addRetailer", addRetailer);
+      const addConsumer = await instance.addConsumer(App.consumerID, {
+        from: App.metamaskAccountID,
+      });
+      console.log("addConsumer", addConsumer);
+    } catch (error) {
+      console.error("assignRoles", error);
+    }
   },
 
   bindEvents: function () {
@@ -169,7 +192,6 @@ App = {
   harvestItem: function (event) {
     event.preventDefault();
     var processId = parseInt($(event.target).data("id"));
-    console.log("processId2", processId);
     App.contracts.SupplyChain.deployed()
       .then(function (instance) {
         return instance.harvestItem(
@@ -231,10 +253,9 @@ App = {
     var processId = parseInt($(event.target).data("id"));
 
     App.contracts.SupplyChain.deployed()
-      .then(function (instance) {
-        const productPrice = web3.toWei(1, "ether");
-        console.log("productPrice", productPrice);
-        return instance.sellItem(App.upc, App.productPrice, {
+      .then(async function (instance) {
+        let productPrice = await web3.utils.toWei(App.productPrice, "ether");
+        return instance.sellItem(App.upc, productPrice, {
           from: App.metamaskAccountID,
         });
       })
@@ -253,10 +274,10 @@ App = {
 
     App.contracts.SupplyChain.deployed()
       .then(function (instance) {
-        const walletValue = web3.toWei(3, "ether");
+        const toPay = web3.utils.toWei("2", "ether");
         return instance.buyItem(App.upc, {
           from: App.metamaskAccountID,
-          value: walletValue,
+          value: toPay,
         });
       })
       .then(function (result) {
@@ -334,7 +355,7 @@ App = {
         console.log("fetchItemBufferOne", result);
       })
       .catch(function (err) {
-        console.error(err.message);
+        console.error("error: " + err.message);
       });
   },
 
@@ -351,7 +372,7 @@ App = {
         console.log("fetchItemBufferTwo", result);
       })
       .catch(function (err) {
-        console.error(err.message);
+        console.error("error: " + err.message);
       });
   },
 
@@ -370,6 +391,7 @@ App = {
     App.contracts.SupplyChain.deployed()
       .then(function (instance) {
         var events = instance.allEvents(function (err, log) {
+          console.log({ err, log });
           if (!err)
             $("#ftc-events").append(
               "<li>" + log.event + " - " + log.transactionHash + "</li>"
