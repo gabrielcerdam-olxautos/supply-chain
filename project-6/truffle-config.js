@@ -1,5 +1,5 @@
 const mnemonic =
-  "fire fade chalk torch argue dove sound give nest faint bulb hazard";
+  "cake omit rain brave monkey river coffee brisk coral knock lake menu";
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {

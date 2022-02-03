@@ -21,6 +21,7 @@ contract ConsumerRole is AccessControlEnumerable {
     constructor() {
         // testing don't pass when i use this function
         // _addConsumer(msg.sender);
+        _setupRole(CONSUMER, msg.sender);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role

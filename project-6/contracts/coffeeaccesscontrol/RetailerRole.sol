@@ -17,7 +17,7 @@ contract RetailerRole is AccessControlEnumerable {
     // In the constructor make the address that deploys this contract the 1st retailer
     constructor() {
         // testing don't pass when i use this function
-        // _addRetailer(msg.sender);
+        _setupRole(RETAILER, msg.sender);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role

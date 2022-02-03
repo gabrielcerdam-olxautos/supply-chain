@@ -23,6 +23,7 @@ contract DistributorRole is AccessControlEnumerable {
     constructor() {
         // testing don't pass when i use this function
         // _addDistributor(msg.sender);
+        _setupRole(DISTRIBUTOR, msg.sender);
     }
 
     // Define a modifier that checks to see if msg.sender has the appropriate role

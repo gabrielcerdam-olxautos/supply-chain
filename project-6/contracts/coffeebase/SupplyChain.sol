@@ -99,7 +99,7 @@ contract SupplyChain is
         _;
         uint256 _price = items[_upc].productPrice;
         uint256 amountToReturn = msg.value - _price;
-        payable(items[_upc].consumerID).transfer(amountToReturn);
+        payable(msg.sender).transfer(amountToReturn);
     }
 
     // Define a modifier that checks if an item.state of a upc is Harvested
@@ -154,6 +154,7 @@ contract SupplyChain is
     // and set 'sku' to 1
     // and set 'upc' to 1
     constructor() {
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         sku = 0;
         upc = 1;
     }
@@ -174,26 +175,20 @@ contract SupplyChain is
         string memory _originFarmLatitude,
         string memory _originFarmLongitude,
         string memory _productNotes
-    ) public {
+    ) public onlyFarmer {
         // Add the new item as part of Harvest
         // Increment sku
-        items[_upc] = Item({
-            sku: sku + 1,
-            upc: _upc,
-            ownerID: msg.sender,
-            originFarmerID: _originFarmerID,
-            originFarmName: _originFarmName,
-            originFarmInformation: _originFarmInformation,
-            originFarmLatitude: _originFarmLatitude,
-            originFarmLongitude: _originFarmLongitude,
-            productID: _upc + sku,
-            productNotes: _productNotes,
-            productPrice: 0,
-            itemState: State.Harvested,
-            distributorID: address(0),
-            retailerID: address(0),
-            consumerID: address(0)
-        });
+        items[_upc].sku = sku;
+        items[_upc].upc = upc;
+        items[_upc].itemState = State.Harvested;
+        items[_upc].ownerID = _originFarmerID;
+        items[_upc].originFarmerID = _originFarmerID;
+        items[_upc].originFarmName = _originFarmName;
+        items[_upc].originFarmInformation = _originFarmInformation;
+        items[_upc].originFarmLatitude = _originFarmLatitude;
+        items[_upc].originFarmLongitude = _originFarmLongitude;
+        items[_upc].productID = sku + upc;
+        items[_upc].productNotes = _productNotes;
         // sku = sku + 1;
         emit Harvested(_upc);
         // Emit the appropriate event
@@ -206,7 +201,7 @@ contract SupplyChain is
             // Call modifier to check if upc has passed previous supply chain stage
             // Call modifier to verify caller of this function
          */
-        verifyCaller(items[_upc].originFarmerID)
+        onlyFarmer
         harvested(_upc)
     {
         // Update the appropriate fields
@@ -222,6 +217,7 @@ contract SupplyChain is
             // Call modifier to check if upc has passed previous supply chain stage
             // Call modifier to verify caller of this function
          */
+        onlyFarmer
         processed(upc)
     {
         // Update the appropriate fields
@@ -239,6 +235,7 @@ contract SupplyChain is
 
     // Call modifier to verify caller of this function
          */
+        onlyFarmer
         packed(_upc)
     {
         // Update the appropriate fields
@@ -262,12 +259,18 @@ contract SupplyChain is
     // Call modifer to send any excess ether back to buyer
          */
         forSale(_upc)
+        paidEnough(items[_upc].productPrice)
+        checkValue(_upc)
+        onlyDistributor
     {
         // Update the appropriate fields - ownerID, distributorID, itemState
-        // Transfer money to farmer
         items[_upc].itemState = State.Sold;
-        emit Sold(_upc);
+        items[_upc].ownerID = msg.sender;
+        items[_upc].distributorID = msg.sender;
+        // Transfer money to farmer
+        payable(items[_upc].originFarmerID).transfer(items[_upc].productPrice);
         // emit the appropriate event
+        emit Sold(_upc);
     }
 
     // Define a function 'shipItem' that allows the distributor to mark an item 'Shipped'
@@ -279,6 +282,7 @@ contract SupplyChain is
             // Call modifier to verify caller of this function
          */
         sold(_upc)
+        verifyCaller(items[_upc].distributorID)
     {
         // Update the appropriate fields
         items[_upc].itemState = State.Shipped;
@@ -295,10 +299,13 @@ contract SupplyChain is
             // Access Control List enforced by calling Smart Contract / DApp
          */
         shipped(_upc)
+        onlyRetailer
     {
-        // Update the appropriate fields - ownerID, retailerID, itemState
-        // Emit the appropriate event
+        // Update the appropriate fields - ownerID, distributorID, itemState
         items[_upc].itemState = State.Received;
+        items[_upc].ownerID = msg.sender;
+        items[_upc].retailerID = msg.sender;
+        // Emit the appropriate event
         emit Received(_upc);
     }
 
@@ -311,10 +318,14 @@ contract SupplyChain is
             // Access Control List enforced by calling Smart Contract / DApp
          */
         received(_upc)
+        onlyConsumer
     {
         // Update the appropriate fields - ownerID, consumerID, itemState
-        // Emit the appropriate event
         items[_upc].itemState = State.Purchased;
+        items[_upc].ownerID = msg.sender;
+        items[_upc].consumerID = msg.sender;
+
+        // Emit the appropriate event
         emit Purchased(_upc);
     }
 
