@@ -97,6 +97,16 @@
           name="originFarmLongitude"
           value="144.341490"
         /><br />
+        Farm Image
+        <br />
+        <input type="file" id="FarmImage" name="FarmImage" />
+        <br />
+        <button class="btn-upload" id="button" type="button" data-id="11">
+          uploadImage
+        </button>
+        <button class="btn-read" id="button" type="button" data-id="12">
+          readImage
+        </button>
         <br />
         <button class="btn-harvest" id="button" type="button" data-id="1">
           Harvest
@@ -111,6 +121,7 @@
           ForSale
         </button>
       </div>
+      <img id="file-content" />
       <div class="form-break"></div>
       <h2>Product Details</h2>
       <div class="form-group">
@@ -190,7 +201,7 @@
     <!-- <script src="js/web3.min.js"></script> -->
     <!-- <script src="js/truffle-contract.js"></script> -->
     <script src="./src/js/truffle-contract.js"></script>
-    <script src="./src/js/app.js"></script>
+    <script src="./src/js/app.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/truffle-contract@latest/dist/truffle-contract.js"></script>
   </body>

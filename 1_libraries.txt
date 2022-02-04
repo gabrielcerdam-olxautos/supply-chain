@@ -1,0 +1,21 @@
+We use the next libraries:
+
+sol
+- "@openzeppelin/contracts/access/AccessControlEnumerable.sol"
+    we use AccessControlEnumerable abstract contract to manage roles of the dapp and their uses cases
+
+js
+- "truffle-assertions": "^0.9.2"
+    We use truffle-assertions to listen event from contract's functions
+- "@openzeppelin/contracts": "^4.4.2",
+    We use some contracts of openzeppelin library like AccessControlEnumerable abstract contract
+- "@truffle/hdwallet-provider": "^2.0.0",
+    We use hdwallet-provider to interact with our wallet
+- "web3": "^1.7.0"
+    We use web3 to interact with the contract and blockchain
+- "chai": "^4.3.6",
+    We use chai to test our contracts
+- "mocha": "^9.2.0",
+    We use mocha to test our contracts
+- "lite-server": "2.4.0",
+    We use lite-server to get up our web in browser

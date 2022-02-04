@@ -1,3 +1,5 @@
+import * as IPFS from "ipfs-core";
+// const IPFS = require("ipfs-core");
 App = {
   web3Provider: null,
   contracts: {},
@@ -118,42 +120,42 @@ App = {
     return App.bindEvents();
   },
 
-  async assignRoles(role) {
-    try {
-      const instance = await Appy.contracts.SupplyChain.deployed();
-      const addFarmer = await instance.addFarmer(App.originFarmerID, {
-        from: App.metamaskAccountID,
-      });
-      console.log("addFarmer", addFarmer);
-      const addDistributor = await instance.addDistributor(App.distributorID, {
-        from: App.metamaskAccountID,
-      });
-      console.log("addDistributor", addDistributor);
-      const addRetailer = await instance.addRetailer(App.retailerID, {
-        from: App.metamaskAccountID,
-      });
-      console.log("addRetailer", addRetailer);
-      const addConsumer = await instance.addConsumer(App.consumerID, {
-        from: App.metamaskAccountID,
-      });
-      console.log("addConsumer", addConsumer);
-    } catch (error) {
-      console.error("assignRoles", error);
-    }
-  },
+  // async assignRoles(role) {
+  //   try {
+  //     const instance = await Appy.contracts.SupplyChain.deployed();
+  //     const addFarmer = await instance.addFarmer(App.originFarmerID, {
+  //       from: App.metamaskAccountID,
+  //     });
+  //     console.log("addFarmer", addFarmer);
+  //     const addDistributor = await instance.addDistributor(App.distributorID, {
+  //       from: App.metamaskAccountID,
+  //     });
+  //     console.log("addDistributor", addDistributor);
+  //     const addRetailer = await instance.addRetailer(App.retailerID, {
+  //       from: App.metamaskAccountID,
+  //     });
+  //     console.log("addRetailer", addRetailer);
+  //     const addConsumer = await instance.addConsumer(App.consumerID, {
+  //       from: App.metamaskAccountID,
+  //     });
+  //     console.log("addConsumer", addConsumer);
+  //   } catch (error) {
+  //     console.error("assignRoles", error);
+  //   }
+  // },
 
   bindEvents: function () {
     $(document).on("click", App.handleButtonClick);
   },
 
   handleButtonClick: async function (event) {
+    var processId = parseInt($(event.target).data("id"));
+    if (!processId) {
+      return;
+    }
     App.readForm();
-    event.preventDefault();
 
     App.getMetaskAccountID();
-
-    var processId = parseInt($(event.target).data("id"));
-    console.log("processId", processId);
 
     switch (processId) {
       case 1:
@@ -185,6 +187,12 @@ App = {
         break;
       case 10:
         return await App.fetchItemBufferTwo(event);
+        break;
+      case 11:
+        return await App.uploadFile(event);
+        break;
+      case 12:
+        return await App.readFile(event);
         break;
     }
   },
@@ -402,10 +410,42 @@ App = {
         console.log(err.message);
       });
   },
+  uploadFile: async function (event) {
+    console.log("uploadFile", event);
+  },
+  readFile: async function (event) {
+    console.log("readFile", event);
+  },
+  convertBase64: function (file) {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  },
+  handleFile: async function (event) {
+    const file = event.target.files[0];
+    if (!file) {
+      $("#file-content").attr("src", "");
+      return;
+    }
+    const base64 = await App.convertBase64(file);
+    $("#file-content").attr("src", base64);
+  },
 };
 
 $(function () {
   $(window).load(function () {
     App.init();
+  });
+  $("#FarmImage").on("change", function (ev) {
+    App.handleFile(ev);
   });
 });

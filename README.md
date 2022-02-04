@@ -1,10 +1,14 @@
 # STATUS
 
-Currently failing in testing
+IPFS is not implemented
 
 # General purpose
 
 This project use testing address, don't use it to your public/personal wallet.
+
+# UML Diagrams
+
+[UML Diagrams](https://lucid.app/folder/invitations/accept/inv_34aafff6-f9d6-461a-a369-8cf2b6a48879)
 
 # Structure
 
@@ -36,8 +40,6 @@ These instructions will get you a copy of the project up and running on your loc
 Please make sure you've already installed ganache-cli, Truffle and enabled MetaMask extension in your browser.
 
 ### Installing
-
-> The starter code is written for **Solidity v0.4.24**. At the time of writing, the current Truffle v5 comes with Solidity v0.5 that requires function _mutability_ and _visibility_ to be specified (please refer to Solidity [documentation](https://docs.soliditylang.org/en/v0.5.0/050-breaking-changes.html) for more details). To use this starter code, please run `npm i -g truffle@4.1.14` to install Truffle v4 with Solidity v0.4.24.
 
 Change directory to `project-6` folder and install all requisite npm packages (as listed in `package.json`):
 
