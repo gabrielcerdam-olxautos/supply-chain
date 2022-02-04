@@ -1,6 +1,4 @@
-import * as IPFS from "ipfs-core";
-// const IPFS = require("ipfs-core");
-App = {
+const App = {
   web3Provider: null,
   contracts: {},
   emptyAddress: "0x0000000000000000000000000000000000000000",
