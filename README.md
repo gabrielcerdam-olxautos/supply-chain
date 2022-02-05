@@ -4,6 +4,13 @@ IPFS is not implemented.
 
 To do first Harvest in localblockchain you need to restart your nonce.
 
+# Environment
+
+Truffle v5.4.19 (core: 5.4.19)
+Solidity - 0.8.2 (solc-js)
+Node v14.17.6
+Web3.js v1.5.3
+
 # General purpose
 
 This project use testing address, don't use it to your public/personal wallet.
@@ -11,6 +18,13 @@ This project use testing address, don't use it to your public/personal wallet.
 # UML Diagrams
 
 [UML Diagrams](https://lucid.app/folder/invitations/accept/inv_34aafff6-f9d6-461a-a369-8cf2b6a48879)
+
+# Environment
+
+Truffle v5.4.19 (core: 5.4.19)
+Solidity - 0.8.2 (solc-js)
+Node v14.17.6
+Web3.js v1.5.3
 
 # Structure
 
